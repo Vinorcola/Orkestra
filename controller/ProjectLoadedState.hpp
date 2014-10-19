@@ -23,6 +23,7 @@ class ProjectLoadedState : public QState
         const ProjectManager* m_projectManager;
         Project* m_currentProject;
         QAction* m_openFile;
+        QAction* m_closeFile;
         QAction* m_saveFile;
         QAction* m_saveAllFiles;
         EditorWidget* m_editorWidget;
@@ -45,6 +46,10 @@ class ProjectLoadedState : public QState
         
         
         
+        QAction* getCloseFileAction() const;
+        
+        
+        
         QAction* getSaveFileAction() const;
         
         
@@ -63,6 +68,10 @@ class ProjectLoadedState : public QState
         
         
         void openFile();
+        
+        
+        
+        void closeFile();
 };
 
 #endif // PROJECTLOADEDSTATE_HPP

@@ -38,6 +38,10 @@ class EditorWidget : public QStackedWidget
         
         
         
+        void deleteFileWidget(FileWidget* widget);
+        
+        
+        
         void saveCurrentFile();
         
         

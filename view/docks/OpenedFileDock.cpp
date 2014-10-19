@@ -35,6 +35,15 @@ void OpenedFileDock::setCurrentProject(Project* project)
 
 
 
+QModelIndex OpenedFileDock::getCurrentFileIndex() const
+{
+    return m_view->currentIndex();
+}
+
+
+
+
+
 void OpenedFileDock::setCurrentFile(const QModelIndex& fileIndex)
 {
     m_view->setCurrentIndex(fileIndex);

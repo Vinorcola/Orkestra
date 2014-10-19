@@ -46,12 +46,26 @@ void EditorWidget::clear()
 
 void EditorWidget::setCurrentFile(const QModelIndex& fileIndex)
 {
-    QWidget* widget(m_currentProject->getFile(fileIndex)->getWidget());
-    if (indexOf(widget) == -1)
+    File* file(m_currentProject->getFile(fileIndex));
+    if (file)
     {
-        addWidget(widget);
+        FileWidget* widget(file->getWidget());
+        if (indexOf(widget) == -1)
+        {
+            addWidget(widget);
+        }
+        setCurrentWidget(widget);
     }
-    setCurrentWidget(widget);
+}
+
+
+
+
+
+void EditorWidget::deleteFileWidget(FileWidget* widget)
+{
+    removeWidget(widget);
+    delete widget;
 }
 
 

@@ -61,6 +61,7 @@ MainController::MainController() :
     menuApplication->addAction(m_importProject);
     menuApplication->addSeparator();
     menuApplication->addAction(projectLoaded->getOpenFileAction());
+    menuApplication->addAction(projectLoaded->getCloseFileAction());
     menuApplication->addAction(projectLoaded->getSaveFileAction());
     menuApplication->addAction(projectLoaded->getSaveAllFilesAction());
     menuApplication->addSeparator();

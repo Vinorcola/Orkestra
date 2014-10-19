@@ -1,5 +1,7 @@
 #include "Project.hpp"
 
+#include <QMessageBox>
+
 
 
 
@@ -88,6 +90,66 @@ File* Project::getFile(const QModelIndex& index) const
 const QList<File*>& Project::getFiles() const
 {
     return m_files;
+}
+
+
+
+
+
+bool Project::close(const QModelIndex& fileIndex,
+                    FileWidget*& widget)
+{
+    File* file(getFile(fileIndex));
+    if (file)
+    {
+        if (file->doesNeedToBeSaved())
+        {
+            QMessageBox dialog;
+            dialog.setText(tr("The file has been modified."));
+            dialog.setInformativeText(tr("Do you want to save your changes?"));
+            dialog.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+            dialog.setDefaultButton(QMessageBox::Save);
+            int result(dialog.exec());
+            
+            if (result == QMessageBox::Save || result == QMessageBox::Discard)
+            {
+                /* NOTE: Deleting the file object does not destruct the widget. The widget will be deleted by the editor
+                 * widget.
+                 */
+                beginRemoveRows(QModelIndex(), fileIndex.row(), fileIndex.row());
+                File* file(m_files.takeAt(fileIndex.row()));
+                endRemoveRows();
+                
+                if (result == QMessageBox::Save)
+                {
+                    file->saveContent();
+                    /** TODO: When error management will be implemented, if the file save failed, just return false
+                     * here.
+                     */
+                }
+                widget = file->getWidget();
+                delete file;
+                
+                return true;
+            }
+        }
+        else
+        {
+            /* NOTE: Deleting the file object does not destruct the widget. The widget will be deleted by the editor
+             * widget.
+             */
+            beginRemoveRows(QModelIndex(), fileIndex.row(), fileIndex.row());
+            File* file(m_files.takeAt(fileIndex.row()));
+            endRemoveRows();
+            
+            widget = file->getWidget();
+            delete file;
+            
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 

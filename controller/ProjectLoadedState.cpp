@@ -16,6 +16,7 @@ ProjectLoadedState::ProjectLoadedState(const ProjectManager* projectManager,
     m_projectManager(projectManager),
     m_currentProject(0),
     m_openFile(new QAction(tr("Open"), this)),
+    m_closeFile(new QAction(tr("Close"), this)),
     m_saveFile(new QAction(tr("Save"), this)),
     m_saveAllFiles(new QAction(tr("Save all"), this)),
     m_editorWidget(editorWidget),
@@ -24,8 +25,11 @@ ProjectLoadedState::ProjectLoadedState(const ProjectManager* projectManager,
     m_connectionFileOpened(),
     m_connectionFileOpeningRequested()
 {
+    // Setup actions.
     m_openFile->setShortcut(Qt::CTRL + Qt::Key_O);
     m_openFile->setDisabled(true);
+    m_closeFile->setShortcut(Qt::CTRL + Qt::Key_W);
+    m_closeFile->setDisabled(true);
     m_saveFile->setShortcut(Qt::CTRL + Qt::Key_S);
     m_saveFile->setDisabled(true);
     m_saveAllFiles->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
@@ -34,6 +38,7 @@ ProjectLoadedState::ProjectLoadedState(const ProjectManager* projectManager,
     connect(m_openedFileDock, &OpenedFileDock::fileChanged, m_editorWidget, &EditorWidget::setCurrentFile);
     
     connect(m_openFile, &QAction::triggered, this, &ProjectLoadedState::openFile);
+    connect(m_closeFile, &QAction::triggered, this, &ProjectLoadedState::closeFile);
     connect(m_saveFile, &QAction::triggered, m_editorWidget, &EditorWidget::saveCurrentFile);
     connect(m_saveAllFiles, &QAction::triggered, m_editorWidget, &EditorWidget::saveAllFiles);
 }
@@ -45,6 +50,15 @@ ProjectLoadedState::ProjectLoadedState(const ProjectManager* projectManager,
 QAction* ProjectLoadedState::getOpenFileAction() const
 {
     return m_openFile;
+}
+
+
+
+
+
+QAction* ProjectLoadedState::getCloseFileAction() const
+{
+    return m_closeFile;
 }
 
 
@@ -72,6 +86,7 @@ QAction* ProjectLoadedState::getSaveAllFilesAction() const
 void ProjectLoadedState::onEntry(QEvent* event)
 {
     m_openFile->setEnabled(true);
+    m_closeFile->setEnabled(true);
     m_saveFile->setEnabled(true);
     m_saveAllFiles->setEnabled(true);
     
@@ -97,6 +112,7 @@ void ProjectLoadedState::onEntry(QEvent* event)
 void ProjectLoadedState::onExit(QEvent* /*event*/)
 {
     m_openFile->setDisabled(true);
+    m_closeFile->setDisabled(true);
     m_saveFile->setDisabled(true);
     m_saveAllFiles->setDisabled(true);
     
@@ -114,5 +130,19 @@ void ProjectLoadedState::openFile()
     if (!path.isEmpty())
     {
         m_currentProject->open(path);
+    }
+}
+
+
+
+
+
+void ProjectLoadedState::closeFile()
+{
+    FileWidget* widget(0);
+    QModelIndex fileIndex(m_openedFileDock->getCurrentFileIndex());
+    if (m_currentProject->close(fileIndex, widget) && widget)
+    {
+        m_editorWidget->deleteFileWidget(widget);
     }
 }

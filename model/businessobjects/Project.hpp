@@ -104,6 +104,20 @@ class Project : public QAbstractListModel, public ConfigurableInterface
         
         
         /**
+         * @brief Destructs the file if it belongs to the project.
+         * 
+         * If the file needs to be saved, a dialog will ask the user what to do.
+         * 
+         * @param fileIndex The index of the file in the project.
+         * @param widget The widget of the file to delete.
+         * @return @b @c true if the file was deleted, @b @c false otherwise.
+         */
+        bool close(const QModelIndex& fileIndex,
+                   FileWidget*& widget);
+        
+        
+        
+        /**
          * @brief Saves the details of the project into the output configuration stream @a outputStream.
          * 
          * @param outputStream The output configuration stream.

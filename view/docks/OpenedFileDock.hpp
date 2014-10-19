@@ -31,6 +31,10 @@ class OpenedFileDock : public QDockWidget
         
         
         
+        QModelIndex getCurrentFileIndex() const;
+        
+        
+        
     signals:
         void fileChanged(const QModelIndex& fileIndex);
         
