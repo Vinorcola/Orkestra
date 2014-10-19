@@ -29,7 +29,8 @@ class MainWindow : public QMainWindow
         
     public:
         MainWindow(ProjectManager* projectManager,
-                   QAction* quit);
+                   QAction* quit,
+                   QAction* saveFile);
         
         
         

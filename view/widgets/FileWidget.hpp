@@ -28,6 +28,22 @@ class FileWidget : public QsciScintilla
          */
         FileWidget(const QString& path,
                    QsciLexer* lexer);
+        
+        
+        
+    signals:
+        /**
+         * @brief Indicates that the user ask to save the file.
+         */
+        void saveRequiered();
+        
+        
+        
+    public slots:
+        /**
+         * @brief Requieres the file to be saved.
+         */
+        void save();
 };
 
 #endif // FILEWIDGET_HPP

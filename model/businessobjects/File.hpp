@@ -176,6 +176,13 @@ class File : public QObject, public ConfigurableInterface
         
         
         
+        /**
+         * @brief Saves the file content.
+         */
+        void saveContent();
+        
+        
+        
     private:
         /**
          * @brief Returns the format of the file.

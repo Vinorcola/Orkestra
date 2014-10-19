@@ -1,6 +1,7 @@
 #include "File.hpp"
 
 #include <QMimeDatabase>
+#include <QTextStream>
 
 
 
@@ -18,6 +19,7 @@ File::File(const QFileInfo& fileInfo,
     m_needsToBeSaved(false)
 {
     connect(m_widget, &FileWidget::modificationChanged, this, &File::handleModification);
+    connect(m_widget, &FileWidget::saveRequiered, this, &File::saveContent);
 }
 
 
@@ -161,6 +163,7 @@ bool File::load(QXmlStreamReader& inputStream,
         }
         m_widget = new FileWidget(m_path, config.getLexer(m_format));
         connect(m_widget, &FileWidget::modificationChanged, this, &File::handleModification);
+        connect(m_widget, &FileWidget::saveRequiered, this, &File::saveContent);
         
         // We go to the end of the file tag.
         inputStream.readNextStartElement();
@@ -185,6 +188,33 @@ void File::handleModification(bool hasModification)
     {
         m_needsToBeSaved = hasModification;
         emit displayableNameChanged(getDisplayableName());
+    }
+}
+
+
+
+
+
+void File::saveContent()
+{
+    if (m_needsToBeSaved)
+    {
+        QFile file(m_path);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        {
+            QTextStream outputStream(&file);
+            outputStream << m_widget->text();
+            
+            file.close();
+            
+            m_needsToBeSaved = false;
+            m_widget->setModified(false);
+            emit displayableNameChanged(getDisplayableName());
+        }
+        else
+        {
+            // Error.
+        }
     }
 }
 

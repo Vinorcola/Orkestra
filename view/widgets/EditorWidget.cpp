@@ -53,3 +53,16 @@ void EditorWidget::setCurrentFile(const QModelIndex& fileIndex)
     }
     setCurrentWidget(widget);
 }
+
+
+
+
+
+void EditorWidget::saveCurrentFile()
+{
+    FileWidget* widget(static_cast<FileWidget*>(currentWidget()));
+    if (widget)
+    {
+        widget->save();
+    }
+}

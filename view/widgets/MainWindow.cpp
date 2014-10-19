@@ -7,7 +7,8 @@
 
 
 MainWindow::MainWindow(ProjectManager* projectManager,
-                       QAction* quit) :
+                       QAction* quit,
+                       QAction* saveFile) :
     QMainWindow(),
     m_editorWidget(new EditorWidget),
     m_projectDock(new ProjectFileDock(projectManager)),
@@ -30,6 +31,8 @@ MainWindow::MainWindow(ProjectManager* projectManager,
     
     
     // Setup central widget.
+    connect(saveFile, &QAction::triggered, m_editorWidget, &EditorWidget::saveCurrentFile);
+    
     setCentralWidget(m_editorWidget);
 }
 

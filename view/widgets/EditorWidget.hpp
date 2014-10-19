@@ -35,6 +35,10 @@ class EditorWidget : public QStackedWidget
         
     public slots:
         void setCurrentFile(const QModelIndex& fileIndex);
+        
+        
+        
+        void saveCurrentFile();
 };
 
 #endif // EDITORWIDGET_HPP

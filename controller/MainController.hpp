@@ -21,6 +21,7 @@ class MainController :public QStateMachine
         ProjectManager* m_projectManager;
         QAction* m_quit;
         QAction* m_importProject;
+        QAction* m_saveFile;
         MainWindow* m_window;
         
         

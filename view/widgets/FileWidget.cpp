@@ -23,3 +23,12 @@ FileWidget::FileWidget(const QString& path,
         setText(file.readAll());
     }
 }
+
+
+
+
+
+void FileWidget::save()
+{
+    emit saveRequiered();
+}
