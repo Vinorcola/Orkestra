@@ -60,7 +60,7 @@ void FileSelectorWidget::browse()
         QFileDialog::getOpenFileName(this, tr("Select a file"), currentFilePath)
     );
     
-    if (newFilePath != currentFilePath)
+    if (!newFilePath.isEmpty() && newFilePath != currentFilePath)
     {
         m_input->setText(newFilePath);
     }

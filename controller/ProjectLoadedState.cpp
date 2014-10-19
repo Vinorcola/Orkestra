@@ -1,5 +1,7 @@
 #include "ProjectLoadedState.hpp"
 
+#include <QAction>
+#include <QFileDialog>
 #include <QStateMachine>
 
 
@@ -13,13 +15,54 @@ ProjectLoadedState::ProjectLoadedState(const ProjectManager* projectManager,
     QState(),
     m_projectManager(projectManager),
     m_currentProject(0),
+    m_openFile(new QAction(tr("Open"), this)),
+    m_saveFile(new QAction(tr("Save"), this)),
+    m_saveAllFiles(new QAction(tr("Save all"), this)),
     m_editorWidget(editorWidget),
     m_projectFileDock(projectFileDock),
     m_openedFileDock(openedFileDock),
     m_connectionFileOpened(),
     m_connectionFileOpeningRequested()
 {
+    m_openFile->setShortcut(Qt::CTRL + Qt::Key_O);
+    m_openFile->setDisabled(true);
+    m_saveFile->setShortcut(Qt::CTRL + Qt::Key_S);
+    m_saveFile->setDisabled(true);
+    m_saveAllFiles->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    m_saveAllFiles->setDisabled(true);
     
+    connect(m_openedFileDock, &OpenedFileDock::fileChanged, m_editorWidget, &EditorWidget::setCurrentFile);
+    
+    connect(m_openFile, &QAction::triggered, this, &ProjectLoadedState::openFile);
+    connect(m_saveFile, &QAction::triggered, m_editorWidget, &EditorWidget::saveCurrentFile);
+    connect(m_saveAllFiles, &QAction::triggered, m_editorWidget, &EditorWidget::saveAllFiles);
+}
+
+
+
+
+
+QAction* ProjectLoadedState::getOpenFileAction() const
+{
+    return m_openFile;
+}
+
+
+
+
+
+QAction* ProjectLoadedState::getSaveFileAction() const
+{
+    return m_saveFile;
+}
+
+
+
+
+
+QAction* ProjectLoadedState::getSaveAllFilesAction() const
+{
+    return m_saveAllFiles;
 }
 
 
@@ -28,6 +71,10 @@ ProjectLoadedState::ProjectLoadedState(const ProjectManager* projectManager,
 
 void ProjectLoadedState::onEntry(QEvent* event)
 {
+    m_openFile->setEnabled(true);
+    m_saveFile->setEnabled(true);
+    m_saveAllFiles->setEnabled(true);
+    
     if (event->type() == QEvent::StateMachineSignal)
     {
         QStateMachine::SignalEvent* signalEvent(static_cast<QStateMachine::SignalEvent*>(event));
@@ -49,6 +96,23 @@ void ProjectLoadedState::onEntry(QEvent* event)
 
 void ProjectLoadedState::onExit(QEvent* /*event*/)
 {
+    m_openFile->setDisabled(true);
+    m_saveFile->setDisabled(true);
+    m_saveAllFiles->setDisabled(true);
+    
     disconnect(m_connectionFileOpened);
     disconnect(m_connectionFileOpeningRequested);
+}
+
+
+
+
+
+void ProjectLoadedState::openFile()
+{
+    QString path(QFileDialog::getOpenFileName(m_editorWidget, tr("Select a file"), m_currentProject->getRootPath()));
+    if (!path.isEmpty())
+    {
+        m_currentProject->open(path);
+    }
 }

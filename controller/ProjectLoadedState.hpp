@@ -22,6 +22,9 @@ class ProjectLoadedState : public QState
     private:
         const ProjectManager* m_projectManager;
         Project* m_currentProject;
+        QAction* m_openFile;
+        QAction* m_saveFile;
+        QAction* m_saveAllFiles;
         EditorWidget* m_editorWidget;
         ProjectFileDock* m_projectFileDock;
         OpenedFileDock* m_openedFileDock;
@@ -38,12 +41,28 @@ class ProjectLoadedState : public QState
         
         
         
+        QAction* getOpenFileAction() const;
+        
+        
+        
+        QAction* getSaveFileAction() const;
+        
+        
+        
+        QAction* getSaveAllFilesAction() const;
+        
+        
+        
     public slots:
         virtual void onEntry(QEvent* event);
         
         
         
         virtual void onExit(QEvent *event);
+        
+        
+        
+        void openFile();
 };
 
 #endif // PROJECTLOADEDSTATE_HPP
