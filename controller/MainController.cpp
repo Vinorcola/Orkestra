@@ -1,10 +1,12 @@
 #include "MainController.hpp"
 
 #include <QApplication>
+#include <QFileDialog>
 #include <QFinalState>
 #include <QMenu>
 #include <QMenuBar>
 
+#include "controller/ProjectLoadedState.hpp"
 #include "view/widgets/ProjectImportator.hpp"
 
 
@@ -20,8 +22,19 @@ MainController::MainController() :
     m_importProject(new QAction(tr("Import a project"), this)),
     m_saveFile(new QAction(tr("Save"), this)),
     m_saveAllFiles(new QAction(tr("Save all"), this)),
-    m_window(new MainWindow(m_projectManager, m_quit, m_saveFile, m_saveAllFiles))
+    m_editorWidget(new EditorWidget),
+    m_projectFileDock(new ProjectFileDock(m_projectManager)),
+    m_openedFileDock(new OpenedFileDock),
+    m_window(new MainWindow(m_quit, m_editorWidget, m_projectFileDock, m_openedFileDock))
 {
+    // Setup widgets.
+    connect(m_openedFileDock, &OpenedFileDock::fileChanged, m_editorWidget, &EditorWidget::setCurrentFile);
+    
+    connect(m_saveFile, &QAction::triggered, m_editorWidget, &EditorWidget::saveCurrentFile);
+    connect(m_saveAllFiles, &QAction::triggered, m_editorWidget, &EditorWidget::saveAllFiles);
+    
+    
+    
     // Setup main window menus.
     QMenu* menuApplication(m_window->menuBar()->addMenu(tr("Orkestra")));
     menuApplication->addAction(m_importProject);
@@ -48,7 +61,7 @@ MainController::MainController() :
     addState(noProjectLoaded);
     setInitialState(noProjectLoaded);
     
-    QState* projectLoaded(new QState);
+    ProjectLoadedState* projectLoaded(new ProjectLoadedState(m_projectManager, m_editorWidget, m_projectFileDock, m_openedFileDock));
     addState(projectLoaded);
     
     QFinalState* quit(new QFinalState);
@@ -61,10 +74,10 @@ MainController::MainController() :
      * first argument.
      */
     noProjectLoaded->addTransition(m_quit, SIGNAL(triggered()), quit);
-    noProjectLoaded->addTransition(m_projectManager, SIGNAL(projectOpened(QModelIndex)), projectLoaded);
+    noProjectLoaded->addTransition(m_projectFileDock, SIGNAL(projectChanged(QModelIndex)), projectLoaded);
     
     projectLoaded->addTransition(m_quit, SIGNAL(triggered()), quit);
-    projectLoaded->addTransition(m_projectManager, SIGNAL(projectOpened(QModelIndex)), projectLoaded);
+    projectLoaded->addTransition(m_projectFileDock, SIGNAL(projectChanged(QModelIndex)), projectLoaded);
     
     
     
@@ -90,6 +103,7 @@ MainController::MainController() :
         qDebug() << "Enter in quit state.";
     });//*/
     
+    connect(noProjectLoaded, &QState::entered, this, &MainController::init);
     connect(quit, &QState::entered, this, &MainController::quit);
 }
 
@@ -106,10 +120,8 @@ MainController::~MainController()
 
 
 
-void MainController::start()
+void MainController::init()
 {
-    QStateMachine::start();
-    
     m_config->load(m_projectManager);
     m_window->show();
 }
@@ -124,6 +136,11 @@ void MainController::displayProjectImportator()
     if (dialog.exec() == QDialog::Accepted)
     {
         m_projectManager->add(dialog.getProjectName(), dialog.getProjectRootPath());
+        /* NOTE: We do nothing more here. The project manager object will notify the project file dock that a new
+         * project was added. The dock will update the current project and trigger the projectChanged() signal. This
+         * signal will push the controller in the projectLoaded state. All the work will be done on project loaded state
+         * entry.
+         */
     }
 }
 

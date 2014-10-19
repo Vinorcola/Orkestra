@@ -11,8 +11,7 @@ ProjectFileDock::ProjectFileDock(ProjectManager* projectManager) :
     m_projectFileModel(new QFileSystemModel(this)),
     m_projectFileView(new QTreeView),
     m_projectsModel(projectManager),
-    m_projectsView(new QComboBox),
-    m_lastConnection()
+    m_projectsView(new QComboBox)
 {
     m_projectFileView->setModel(m_projectFileModel);
     m_projectFileView->setColumnHidden(1, true);// Size
@@ -32,7 +31,7 @@ ProjectFileDock::ProjectFileDock(ProjectManager* projectManager) :
     setWidget(widget);
     
     connect(m_projectsView, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProjectFileDock::setupCurrentProject);
-    connect(m_projectsModel, &ProjectManager::projectOpened, [=](const QModelIndex& projectIndex)
+    connect(projectManager, &ProjectManager::projectOpened, [=](const QModelIndex& projectIndex)
     {
         m_projectsView->setCurrentIndex(projectIndex.row());
     });
@@ -47,15 +46,12 @@ void ProjectFileDock::setupCurrentProject(int projectRow)
 {
     QModelIndex projectIndex(m_projectsModel->index(projectRow));
     Project* project(m_projectsModel->getProject(projectIndex));
-    m_projectFileView->setRootIndex(m_projectFileModel->setRootPath(project->getRootPath()));
-    
-    if (m_lastConnection)
+    if (project)
     {
-        disconnect(m_lastConnection);
+        m_projectFileView->setRootIndex(m_projectFileModel->setRootPath(project->getRootPath()));
+        
+        emit projectChanged(projectIndex);
     }
-    m_lastConnection = connect(this, &ProjectFileDock::fileOpeningRequested, project, &Project::open);
-    
-    emit projectChanged(projectIndex);
 }
 
 

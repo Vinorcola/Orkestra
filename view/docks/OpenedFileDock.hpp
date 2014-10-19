@@ -18,7 +18,6 @@ class OpenedFileDock : public QDockWidget
         
     private:
         QListView* m_view;
-        QMetaObject::Connection m_lastConnectionFromProject;
         QMetaObject::Connection m_lastConnectionFromView;
         
         
@@ -34,6 +33,11 @@ class OpenedFileDock : public QDockWidget
         
     signals:
         void fileChanged(const QModelIndex& fileIndex);
+        
+        
+        
+    public slots:
+        void setCurrentFile(const QModelIndex& fileIndex);
 };
 
 #endif // OPENEDFILEDOCK_HPP

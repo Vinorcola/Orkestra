@@ -4,7 +4,6 @@
 #include <QComboBox>
 #include <QDockWidget>
 #include <QFileSystemModel>
-#include <QMetaObject>
 #include <QTreeView>
 
 #include "model/businessobjects/ProjectManager.hpp"
@@ -24,7 +23,6 @@ class ProjectFileDock : public QDockWidget
         QTreeView* m_projectFileView;
         ProjectManager* m_projectsModel;
         QComboBox* m_projectsView;
-        QMetaObject::Connection m_lastConnection;
         
         
         

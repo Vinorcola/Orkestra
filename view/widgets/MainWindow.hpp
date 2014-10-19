@@ -19,24 +19,15 @@ class MainWindow : public QMainWindow
         
         
     private:
-        EditorWidget* m_editorWidget;
-        ProjectFileDock* m_projectDock;
-        OpenedFileDock* m_openedFileDock;
         QAction* m_quitAction;
-        ProjectManager* m_projectManager;
         
         
         
     public:
-        MainWindow(ProjectManager* projectManager,
-                   QAction* quit,
-                   QAction* saveFile,
-                   QAction* saveAllFiles);
-        
-        
-        
-    public slots:
-        void setupCurrentProject(const QModelIndex& projectIndex);
+        MainWindow(QAction* quit,
+                   EditorWidget* editorWidget,
+                   ProjectFileDock* projectFileDock,
+                   OpenedFileDock* openedFileDock);
         
         
         

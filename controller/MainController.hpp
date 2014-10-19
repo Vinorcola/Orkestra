@@ -23,6 +23,9 @@ class MainController :public QStateMachine
         QAction* m_importProject;
         QAction* m_saveFile;
         QAction* m_saveAllFiles;
+        EditorWidget* m_editorWidget;
+        ProjectFileDock* m_projectFileDock;
+        OpenedFileDock* m_openedFileDock;
         MainWindow* m_window;
         
         
@@ -37,7 +40,7 @@ class MainController :public QStateMachine
         
         
     public slots:
-        void start();
+        void init();
         
         
         

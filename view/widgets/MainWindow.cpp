@@ -6,16 +6,12 @@
 
 
 
-MainWindow::MainWindow(ProjectManager* projectManager,
-                       QAction* quit,
-                       QAction* saveFile,
-                       QAction* saveAllFiles) :
+MainWindow::MainWindow(QAction* quit,
+                       EditorWidget* editorWidget,
+                       ProjectFileDock* projectFileDock,
+                       OpenedFileDock* openedFileDock) :
     QMainWindow(),
-    m_editorWidget(new EditorWidget),
-    m_projectDock(new ProjectFileDock(projectManager)),
-    m_openedFileDock(new OpenedFileDock),
-    m_quitAction(quit),
-    m_projectManager(projectManager)
+    m_quitAction(quit)
 {
     setWindowTitle(tr("Orkestra v0.1"));
     setMinimumSize(800, 400);
@@ -23,30 +19,13 @@ MainWindow::MainWindow(ProjectManager* projectManager,
     
     
     // Setup docks.
-    addDockWidget(Qt::LeftDockWidgetArea, m_projectDock);
-    addDockWidget(Qt::LeftDockWidgetArea, m_openedFileDock);
-    
-    connect(m_projectDock, &ProjectFileDock::projectChanged, this, &MainWindow::setupCurrentProject);
-    connect(m_openedFileDock, &OpenedFileDock::fileChanged, m_editorWidget, &EditorWidget::setCurrentFile);
+    addDockWidget(Qt::LeftDockWidgetArea, projectFileDock);
+    addDockWidget(Qt::LeftDockWidgetArea, openedFileDock);
     
     
     
     // Setup central widget.
-    connect(saveFile, &QAction::triggered, m_editorWidget, &EditorWidget::saveCurrentFile);
-    connect(saveAllFiles, &QAction::triggered, m_editorWidget, &EditorWidget::saveAllFiles);
-    
-    setCentralWidget(m_editorWidget);
-}
-
-
-
-
-
-void MainWindow::setupCurrentProject(const QModelIndex& projectIndex)
-{
-    Project* project(m_projectManager->getProject(projectIndex));
-    m_openedFileDock->setCurrentProject(project);
-    m_editorWidget->setCurrentProject(project);
+    setCentralWidget(editorWidget);
 }
 
 

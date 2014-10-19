@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     view/widgets/FileSelectorWidget.cpp \
     view/widgets/FileWidget.cpp \
     view/widgets/MainWindow.cpp \
-    view/widgets/ProjectImportator.cpp
+    view/widgets/ProjectImportator.cpp \
+    controller/ProjectLoadedState.cpp
 
 
 HEADERS += config/global.hpp \
@@ -44,4 +45,5 @@ HEADERS += config/global.hpp \
     view/widgets/FileSelectorWidget.hpp \
     view/widgets/FileWidget.hpp \
     view/widgets/MainWindow.hpp \
-    view/widgets/ProjectImportator.hpp
+    view/widgets/ProjectImportator.hpp \
+    controller/ProjectLoadedState.hpp
