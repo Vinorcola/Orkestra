@@ -129,6 +129,8 @@ class File : public QObject, public ConfigurableInterface
         /**
          * @brief Saves the details of the file into the output configuration stream @a outputStream.
          * 
+         * NOTE: This method does NOT save the file content, but only file details in the configuration.
+         * 
          * @param outputStream The output configuration stream.
          */
         virtual void save(QXmlStreamWriter& outputStream) const;
@@ -149,13 +151,28 @@ class File : public QObject, public ConfigurableInterface
         
         
         
+    signals:
+        /**
+         * @brief Signal triggered when the displayable name changed.
+         * 
+         * Typicaly, this signal is emited when a change occurs in the content or when the fle is saved.
+         * 
+         * @param name The new displayable name.
+         */
+        void displayableNameChanged(const QString& name);
+        
+        
+        
     public slots:
         /**
-         * @brief Handle an edition in the file.
+         * @brief Handle the modification change in the file.
          * 
-         * This slot must be called when the user make a modification in the file content.
+         * NOTE: A modification change occurs when the user first change the file content or when ha cancel all the
+         * changes he made before saving the file.
+         * 
+         * @param hasModification Indicates if there is modification is the file content.
          */
-        void handleEdition();
+        void handleModification(bool hasModification);
         
         
         

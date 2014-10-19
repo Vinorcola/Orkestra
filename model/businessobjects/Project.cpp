@@ -209,7 +209,7 @@ QVariant Project::data(const QModelIndex& index,
     {
         if (role == Qt::DisplayRole)
         {
-            return m_files.at(index.row())->getName();
+            return m_files.at(index.row())->getDisplayableName();
         }
     }
     
@@ -226,6 +226,11 @@ void Project::add(File* file)
     beginInsertRows(QModelIndex(), insertRow, insertRow);
     m_files.append(file);
     endInsertRows();
+    
+    connect(file, &File::displayableNameChanged, [=]()
+    {
+        emit dataChanged(index(insertRow), index(insertRow), { Qt::DisplayRole });
+    });
     
     emit fileOpened(index(insertRow));
 }

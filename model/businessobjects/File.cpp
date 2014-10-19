@@ -17,7 +17,7 @@ File::File(const QFileInfo& fileInfo,
     m_widget(new FileWidget(m_path, config.getLexer(m_format))),
     m_needsToBeSaved(false)
 {
-    
+    connect(m_widget, &FileWidget::modificationChanged, this, &File::handleModification);
 }
 
 
@@ -160,6 +160,7 @@ bool File::load(QXmlStreamReader& inputStream,
             delete m_widget;
         }
         m_widget = new FileWidget(m_path, config.getLexer(m_format));
+        connect(m_widget, &FileWidget::modificationChanged, this, &File::handleModification);
         
         // We go to the end of the file tag.
         inputStream.readNextStartElement();
@@ -178,9 +179,13 @@ bool File::load(QXmlStreamReader& inputStream,
 
 
 
-void File::handleEdition()
+void File::handleModification(bool hasModification)
 {
-    m_needsToBeSaved = true;
+    if (m_needsToBeSaved != hasModification)
+    {
+        m_needsToBeSaved = hasModification;
+        emit displayableNameChanged(getDisplayableName());
+    }
 }
 
 

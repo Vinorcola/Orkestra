@@ -10,6 +10,8 @@ FileWidget::FileWidget(const QString& path,
                        QsciLexer* lexer) :
     QsciScintilla()
 {
+    setUtf8(true);
+    
     setLexer(lexer);
     setMarginLineNumbers(1, true);
     setMarginWidth(1, "--------");
