@@ -18,8 +18,12 @@ Orkestra is meant to be an IDE dedicated to Symfony2. An IDE fast and easy to us
 * Create a service easily (an UI that change itself the configuration files in XML or YAML);
 * Integrates the console manipulation into the IDE;
 * Display the official doc and the API doc into the IDE (just put your mouse on a class or an object, press F1, and there you go: on the API doc page related to the class);
-* git integration;
-* ... some more that will come.
+* Git integration;
+* Composer global installation;
+* Create new project by selecting the bundles you want;
+* Add new bundles to your project;
+* Configure Apache2 virtual host for each projects;
+* ... (some more will come).
 
 Tools
 -----
