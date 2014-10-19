@@ -22,6 +22,7 @@ class MainController :public QStateMachine
         QAction* m_quit;
         QAction* m_importProject;
         QAction* m_saveFile;
+        QAction* m_saveAllFiles;
         MainWindow* m_window;
         
         

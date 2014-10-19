@@ -19,13 +19,15 @@ MainController::MainController() :
     m_quit(new QAction(tr("Quit"), this)),
     m_importProject(new QAction(tr("Import a project"), this)),
     m_saveFile(new QAction(tr("Save"), this)),
-    m_window(new MainWindow(m_projectManager, m_quit, m_saveFile))
+    m_saveAllFiles(new QAction(tr("Save all"), this)),
+    m_window(new MainWindow(m_projectManager, m_quit, m_saveFile, m_saveAllFiles))
 {
     // Setup main window menus.
     QMenu* menuApplication(m_window->menuBar()->addMenu(tr("Orkestra")));
     menuApplication->addAction(m_importProject);
     menuApplication->addSeparator();
     menuApplication->addAction(m_saveFile);
+    menuApplication->addAction(m_saveAllFiles);
     menuApplication->addSeparator();
     menuApplication->addAction(m_quit);
     
@@ -35,6 +37,7 @@ MainController::MainController() :
     m_quit->setShortcut(Qt::CTRL + Qt::Key_Q);
     m_importProject->setShortcut(Qt::CTRL + Qt::Key_I);
     m_saveFile->setShortcut(Qt::CTRL + Qt::Key_S);
+    m_saveAllFiles->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
     
     connect(m_importProject, &QAction::triggered, this, &MainController::displayProjectImportator);
     

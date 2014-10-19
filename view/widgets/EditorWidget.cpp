@@ -66,3 +66,15 @@ void EditorWidget::saveCurrentFile()
         widget->save();
     }
 }
+
+
+
+
+
+void EditorWidget::saveAllFiles()
+{
+    for (int i(0), iEnd(count()); i < iEnd; ++i)
+    {
+        static_cast<FileWidget*>(widget(i))->save();
+    }
+}

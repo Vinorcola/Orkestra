@@ -39,6 +39,10 @@ class EditorWidget : public QStackedWidget
         
         
         void saveCurrentFile();
+        
+        
+        
+        void saveAllFiles();
 };
 
 #endif // EDITORWIDGET_HPP

@@ -30,7 +30,8 @@ class MainWindow : public QMainWindow
     public:
         MainWindow(ProjectManager* projectManager,
                    QAction* quit,
-                   QAction* saveFile);
+                   QAction* saveFile,
+                   QAction* saveAllFiles);
         
         
         
