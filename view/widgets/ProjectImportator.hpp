@@ -22,7 +22,7 @@ class ProjectImportator : public QDialog
         
         
     public:
-        ProjectImportator(QWidget* parent);
+        explicit ProjectImportator(QWidget* parent);
         
         
         

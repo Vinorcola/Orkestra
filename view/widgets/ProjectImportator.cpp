@@ -9,7 +9,7 @@
 
 ProjectImportator::ProjectImportator(QWidget* parent) :
     QDialog(parent),
-    m_nameInput(new QLineEdit("Egyptis")),/// TODO: Remove default.
+    m_nameInput(new QLineEdit),
     m_rootPathInput(new FileSelectorWidget(true))
 {
     setWindowTitle(tr("Import an existing project"));

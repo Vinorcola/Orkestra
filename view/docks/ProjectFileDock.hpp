@@ -29,7 +29,7 @@ class ProjectFileDock : public QDockWidget
         
         
     public:
-        ProjectFileDock(ProjectManager* projectManager);
+        explicit ProjectFileDock(ProjectManager* projectManager);
         
         
         

@@ -28,7 +28,7 @@ class Config : public QObject
         
         
     public:
-        Config(QObject* parent);
+        explicit Config(QObject* parent);
         
         
         

@@ -55,7 +55,7 @@ class File : public QObject, public ConfigurableInterface
          * 
          * @param parent The parent object.
          */
-        File(QObject* parent);
+        explicit File(QObject* parent);
         
         
         

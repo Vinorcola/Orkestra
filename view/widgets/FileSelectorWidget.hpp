@@ -26,7 +26,7 @@ class FileSelectorWidget : public QWidget
         
         
     public:
-        FileSelectorWidget(const bool selectDirectory = false);
+        explicit FileSelectorWidget(const bool selectDirectory = false);
         
         
         

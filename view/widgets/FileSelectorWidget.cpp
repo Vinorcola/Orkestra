@@ -9,7 +9,7 @@
 
 FileSelectorWidget::FileSelectorWidget(const bool selectDirectory) :
     QWidget(),
-    m_input(new QLineEdit("/media/vinorcola/Home/Vinorcola/Projets/Egyptis/Sources")),/// TODO: remove default
+    m_input(new QLineEdit),
     m_button(new QPushButton(tr("Browse..."))),
     m_isValid(false),
     m_selectDirectory(selectDirectory),
