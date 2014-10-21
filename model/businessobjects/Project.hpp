@@ -112,8 +112,29 @@ class Project : public QAbstractListModel, public ConfigurableInterface
          * @param widget The widget of the file to delete.
          * @return @b @c true if the file was deleted, @b @c false otherwise.
          */
-        bool close(const QModelIndex& fileIndex,
-                   FileWidget*& widget);
+        bool closeFile(const QModelIndex& fileIndex,
+                       FileWidget*& widget);
+        
+        
+        
+        /**
+         * @brief Prepares the project closing.
+         * 
+         * We basicaly check if there are files that need to be saved before closing the project. If so, we ask the user
+         * what to do.
+         * 
+         * @return @b @c true if the project can be closed, @b @c false otherwise.
+         */
+        bool prepareClose();
+        
+        
+        
+        /**
+         * @brief Deletes the widget of all the files.
+         * 
+         * This method is called just before closing a project.
+         */
+        void deleteAllFileWidgets();
         
         
         
@@ -156,7 +177,7 @@ class Project : public QAbstractListModel, public ConfigurableInterface
          * 
          * @param filePath The path to the file to open.
          */
-        void open(const QString& filePath);
+        void openFile(const QString& filePath);
         
         
         

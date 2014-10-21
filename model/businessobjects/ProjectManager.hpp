@@ -36,8 +36,12 @@ class ProjectManager : public QAbstractListModel, public ConfigurableInterface
         
         
         
-        void add(const QString& name,
-                 const QString& rootPath);
+        void addProject(const QString& name,
+                        const QString& rootPath);
+        
+        
+        
+        void deleteProject(Project* project);
         
         
         

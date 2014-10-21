@@ -59,6 +59,7 @@ MainController::MainController() :
     // Setup main window menus.
     QMenu* menuApplication(m_window->menuBar()->addMenu(tr("Orkestra")));
     menuApplication->addAction(m_importProject);
+    menuApplication->addAction(projectLoaded->getCloseProjectAction());
     menuApplication->addSeparator();
     menuApplication->addAction(projectLoaded->getOpenFileAction());
     menuApplication->addAction(projectLoaded->getCloseFileAction());
@@ -104,7 +105,7 @@ void MainController::displayProjectImportator()
     ProjectImportator dialog(m_window);
     if (dialog.exec() == QDialog::Accepted)
     {
-        m_projectManager->add(dialog.getProjectName(), dialog.getProjectRootPath());
+        m_projectManager->addProject(dialog.getProjectName(), dialog.getProjectRootPath());
         /* NOTE: We do nothing more here. The project manager object will notify the project file dock that a new
          * project was added. The dock will update the current project and trigger the projectChanged() signal. This
          * signal will push the controller in the projectLoaded state. All the work will be done on project loaded state

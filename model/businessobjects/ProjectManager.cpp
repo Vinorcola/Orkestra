@@ -40,10 +40,32 @@ const QList<Project*>& ProjectManager::getProjects() const
 
 
 
-void ProjectManager::add(const QString& name,
-                         const QString& rootPath)
+void ProjectManager::addProject(const QString& name,
+                                const QString& rootPath)
 {
     add(new Project(name, rootPath, m_config, this));
+}
+
+
+
+
+
+void ProjectManager::deleteProject(Project* project)
+{
+    int projectRow(m_projects.indexOf(project));
+    if (projectRow != -1 && project->prepareClose())
+    {
+        beginRemoveRows(QModelIndex(), projectRow, projectRow);
+        m_projects.removeOne(project);
+        endRemoveRows();
+        
+        /* NOTE: At this stage, the editor widget as clear itself as the current project changed. So the file widget are
+         * not used anymore. We can delete them.
+         */
+        project->deleteAllFileWidgets();
+        
+        delete project;
+    }
 }
 
 

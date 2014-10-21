@@ -96,8 +96,8 @@ const QList<File*>& Project::getFiles() const
 
 
 
-bool Project::close(const QModelIndex& fileIndex,
-                    FileWidget*& widget)
+bool Project::closeFile(const QModelIndex& fileIndex,
+                        FileWidget*& widget)
 {
     File* file(getFile(fileIndex));
     if (file)
@@ -106,7 +106,7 @@ bool Project::close(const QModelIndex& fileIndex,
         {
             QMessageBox dialog;
             dialog.setText(tr("The file has been modified."));
-            dialog.setInformativeText(tr("Do you want to save your changes?"));
+            dialog.setInformativeText(tr("Do you want to save the changes?"));
             dialog.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
             dialog.setDefaultButton(QMessageBox::Save);
             int result(dialog.exec());
@@ -150,6 +150,79 @@ bool Project::close(const QModelIndex& fileIndex,
     }
     
     return false;
+}
+
+
+
+
+
+bool Project::prepareClose()
+{
+    QList<File*> fileToSave;
+    for (int i(0), iEnd(m_files.size()); i < iEnd; ++i)
+    {
+        if (m_files.at(i)->doesNeedToBeSaved())
+        {
+            fileToSave.append(m_files.at(i));
+        }
+    }
+    
+    bool saveAll(false);
+    while (!fileToSave.isEmpty())
+    {
+        if (saveAll)
+        {
+            fileToSave.last()->saveContent();
+        }
+        else
+        {
+            QMessageBox dialog;
+            dialog.setText(tr("The file \"%1\" has been modified.").arg(fileToSave.last()->getName()));
+            dialog.setInformativeText(tr("Do you want to save the changes?"));
+            if (fileToSave.size() > 1)
+            {
+                dialog.setStandardButtons(QMessageBox::SaveAll | QMessageBox::Save | QMessageBox::NoToAll | QMessageBox::Discard | QMessageBox::Cancel);
+                dialog.setDefaultButton(QMessageBox::SaveAll);
+            }
+            else
+            {
+                dialog.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+                dialog.setDefaultButton(QMessageBox::Save);
+            }
+            
+            switch (dialog.exec())
+            {
+                case QMessageBox::Cancel:
+                    return false;
+                    
+                case QMessageBox::NoToAll:
+                    return true;
+                    
+                case QMessageBox::SaveAll:
+                    saveAll = true;
+                    // No break here!
+                    
+                case QMessageBox::Save:
+                    fileToSave.last()->saveContent();
+            }
+        }
+        
+        fileToSave.takeLast();
+    }
+    
+    return true;
+}
+
+
+
+
+
+void Project::deleteAllFileWidgets()
+{
+    for (int i(0), iEnd(m_files.size()); i < iEnd; ++i)
+    {
+        delete m_files.at(i)->getWidget();
+    }
 }
 
 
@@ -231,7 +304,7 @@ bool Project::load(QXmlStreamReader& inputStream,
 
 
 
-void Project::open(const QString& filePath)
+void Project::openFile(const QString& filePath)
 {
     QFileInfo fileInfo(filePath);
     
