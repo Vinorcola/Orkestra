@@ -55,6 +55,7 @@ void EditorWidget::setCurrentFile(const QModelIndex& fileIndex)
             addWidget(widget);
         }
         setCurrentWidget(widget);
+        widget->setFocus();
     }
 }
 
