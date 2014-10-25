@@ -9,6 +9,7 @@
 #include "controller/ProjectLoadedState.hpp"
 #include "view/widgets/ComposerConfigDialog.hpp"
 #include "view/widgets/ProjectImportator.hpp"
+#include "view/widgets/PHPConfigDialog.hpp"
 
 
 
@@ -20,6 +21,7 @@ MainController::MainController() :
     m_projectManager(new ProjectManager(*m_config, this)),
     m_quit(new QAction(tr("Quit"), this)),
     m_importProject(new QAction(tr("Import a project"), this)),
+    m_phpConfig(new QAction(tr("PHP"), this)),
     m_composerConfig(new QAction(tr("Composer"), this)),
     m_editorWidget(new EditorWidget),
     m_projectFileDock(new ProjectFileDock(m_projectManager)),
@@ -70,6 +72,7 @@ MainController::MainController() :
     menuApplication->addAction(m_quit);
     
     QMenu* menuConfiguration(m_window->menuBar()->addMenu(tr("Configuration")));
+    menuConfiguration->addAction(m_phpConfig);
     menuConfiguration->addAction(m_composerConfig);
     
     
@@ -80,6 +83,7 @@ MainController::MainController() :
     
     connect(m_importProject, &QAction::triggered, this, &MainController::displayProjectImportator);
     connect(m_composerConfig, &QAction::triggered, this, &MainController::configureComposer);
+    connect(m_phpConfig, &QAction::triggered, this, &MainController::configurePHP);
 }
 
 
@@ -116,6 +120,19 @@ void MainController::displayProjectImportator()
          * signal will push the controller in the projectLoaded state. All the work will be done on project loaded state
          * entry.
          */
+    }
+}
+
+
+
+
+
+void MainController::configurePHP()
+{
+    PHPConfigDialog dialog(m_config->getPHPConfig().getCommand(), m_window);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_config->getPHPConfig().setCommand(dialog.getCommand());
     }
 }
 

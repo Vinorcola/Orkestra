@@ -1,8 +1,7 @@
-#include "ComposerConfigDialog.hpp"
+#include "PHPConfigDialog.hpp"
 
 #include <QDialogButtonBox>
 #include <QFormLayout>
-#include <QProcess>
 #include <QPushButton>
 
 #include "view/widgets/CommandLineLauncherDialog.hpp"
@@ -11,27 +10,26 @@
 
 
 
-const QString ComposerConfigDialog::NON_TESTED(tr("Non tested"));
-const QString ComposerConfigDialog::TEST_FAILED(tr("Unvalid command"));
-const QString ComposerConfigDialog::TEST_SUCCEEDED(tr("Valid command"));
+const QString PHPConfigDialog::NON_TESTED(tr("Non tested"));
+const QString PHPConfigDialog::TEST_FAILED(tr("Unvalid command"));
+const QString PHPConfigDialog::TEST_SUCCEEDED(tr("Valid command"));
 
 
 
 
 
-ComposerConfigDialog::ComposerConfigDialog(const QString& defaultCommand,
-                                           QWidget* parent) :
+PHPConfigDialog::PHPConfigDialog(const QString& defaultCommand,
+                                 QWidget* parent) :
     QDialog(parent),
     m_commandInput(new QLineEdit(defaultCommand)),
     m_testLabel(new QLabel(NON_TESTED))
 {
-    setWindowTitle(tr("Composer configuration"));
+    setWindowTitle(tr("PHP configuration"));
     setMinimumSize(600, 400);
     
     
     
     QPushButton* testButton(new QPushButton(tr("Test")));
-    QPushButton* updateButton(new QPushButton(tr("Update Composer")));
     
     QDialogButtonBox* buttons(new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel));
     
@@ -41,8 +39,7 @@ ComposerConfigDialog::ComposerConfigDialog(const QString& defaultCommand,
     commandLayout->addWidget(testButton);
     
     QFormLayout* formLayout(new QFormLayout);
-    formLayout->addRow(tr("Composer command:"), commandLayout);
-    formLayout->addRow(tr("Update Composer:"), updateButton);
+    formLayout->addRow(tr("PHP command:"), commandLayout);
     
     QVBoxLayout* layout(new QVBoxLayout);
     layout->addLayout(formLayout);
@@ -55,17 +52,16 @@ ComposerConfigDialog::ComposerConfigDialog(const QString& defaultCommand,
     {
         m_testLabel->setText(NON_TESTED);
     });
-    connect(testButton, &QPushButton::clicked, this, &ComposerConfigDialog::test);
-    connect(updateButton, &QPushButton::clicked, this, &ComposerConfigDialog::update);
-    connect(buttons, &QDialogButtonBox::accepted, this, &ComposerConfigDialog::accept);
-    connect(buttons, &QDialogButtonBox::rejected, this, &ComposerConfigDialog::reject);
+    connect(testButton, &QPushButton::clicked, this, &PHPConfigDialog::test);
+    connect(buttons, &QDialogButtonBox::accepted, this, &PHPConfigDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, this, &PHPConfigDialog::reject);
 }
 
 
 
 
 
-QString ComposerConfigDialog::getCommand() const
+QString PHPConfigDialog::getCommand() const
 {
     return m_commandInput->text();
 }
@@ -74,7 +70,7 @@ QString ComposerConfigDialog::getCommand() const
 
 
 
-void ComposerConfigDialog::test()
+void PHPConfigDialog::test()
 {
     CommandLineLauncherDialog dialog(this, m_commandInput->text(), QStringList({"--version"}));
     if (dialog.exec() == QDialog::Accepted)
@@ -88,14 +84,4 @@ void ComposerConfigDialog::test()
             m_testLabel->setText(TEST_FAILED);
         }
     }
-}
-
-
-
-
-
-void ComposerConfigDialog::update()
-{
-    CommandLineLauncherDialog dialog(this, m_commandInput->text(), QStringList({"self-update"}));
-    dialog.exec();
 }

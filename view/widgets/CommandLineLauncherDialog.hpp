@@ -26,6 +26,13 @@ class CommandLineLauncherDialog : public QDialog
         
     public:
         CommandLineLauncherDialog(QWidget* parent,
+                                  const QString& workingDirectory,
+                                  const QString& command,
+                                  const QStringList& arguments = QStringList());
+        
+        
+        
+        CommandLineLauncherDialog(QWidget* parent,
                                   const QString& command,
                                   const QStringList& arguments = QStringList());
         

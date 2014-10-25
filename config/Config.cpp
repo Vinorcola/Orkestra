@@ -22,6 +22,7 @@ Config::Config(QObject* parent) :
     m_directory(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first() + "/orkestra"),
     m_file(m_directory + "/config.xml"),
     m_lexerList(),
+    m_phpConfig(),
     m_composerConfig()
 {
     if (!QFileInfo::exists(m_directory))
@@ -72,6 +73,15 @@ QsciLexer* Config::getLexer(const FileFormat::Enum format) const
 
 
 
+PHPConfig& Config::getPHPConfig()
+{
+    return m_phpConfig;
+}
+
+
+
+
+
 ComposerConfig& Config::getComposerConfig()
 {
     return m_composerConfig;
@@ -96,6 +106,7 @@ void Config::save(const ProjectManager* projectManager)
         
         outputStream.writeStartElement(QStringLiteral("config"));
         
+        m_phpConfig.save(outputStream);
         m_composerConfig.save(outputStream);
         projectManager->save(outputStream);
         
@@ -133,6 +144,7 @@ void Config::load(ProjectManager* projectManager)
             while (!inputStream.atEnd() && inputStream.readNextStartElement() && inputStream.name() != "orkestra") {}
             while (!inputStream.atEnd() && inputStream.readNextStartElement() && inputStream.name() != "config") {}
             
+            m_phpConfig.load(inputStream, *this);
             m_composerConfig.load(inputStream, *this);
             projectManager->load(inputStream, *this);
             

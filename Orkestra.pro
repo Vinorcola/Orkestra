@@ -24,6 +24,7 @@ SOURCES += main.cpp\
     model/businessobjects/Project.cpp \
     model/businessobjects/ProjectManager.cpp \
     model/config/ComposerConfig.cpp \
+    model/config/PHPConfig.cpp \
     view/docks/OpenedFileDock.cpp \
     view/docks/ProjectFileDock.cpp \
     view/widgets/CommandLineLauncherDialog.cpp \
@@ -32,6 +33,7 @@ SOURCES += main.cpp\
     view/widgets/FileSelectorWidget.cpp \
     view/widgets/FileWidget.cpp \
     view/widgets/MainWindow.cpp \
+    view/widgets/PHPConfigDialog.cpp \
     view/widgets/ProjectImportator.cpp
 
 
@@ -44,6 +46,7 @@ HEADERS += config/global.hpp \
     model/businessobjects/Project.hpp \
     model/businessobjects/ProjectManager.hpp \
     model/config/ComposerConfig.hpp \
+    model/config/PHPConfig.hpp \
     view/docks/OpenedFileDock.hpp \
     view/docks/ProjectFileDock.hpp \
     view/widgets/CommandLineLauncherDialog.hpp \
@@ -52,4 +55,5 @@ HEADERS += config/global.hpp \
     view/widgets/FileSelectorWidget.hpp \
     view/widgets/FileWidget.hpp \
     view/widgets/MainWindow.hpp \
+    view/widgets/PHPConfigDialog.hpp \
     view/widgets/ProjectImportator.hpp

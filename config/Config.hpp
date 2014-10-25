@@ -8,6 +8,7 @@
 #include "config/ConfigurableInterface.hpp"
 #include "config/global.hpp"
 #include "model/config/ComposerConfig.hpp"
+#include "model/config/PHPConfig.hpp"
 
 class ProjectManager;
 
@@ -25,6 +26,7 @@ class Config : public QObject
         QString m_directory;
         QFile m_file;
         QHash<FileFormat::Enum, QsciLexer*> m_lexerList;
+        PHPConfig m_phpConfig;
         ComposerConfig m_composerConfig;
         
         
@@ -35,6 +37,10 @@ class Config : public QObject
         
         
         QsciLexer* getLexer(const FileFormat::Enum format) const;
+        
+        
+        
+        PHPConfig& getPHPConfig();
         
         
         

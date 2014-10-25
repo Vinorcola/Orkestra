@@ -13,6 +13,10 @@ ProjectImportator::ProjectImportator(QWidget* parent) :
     m_rootPathInput(new FileSelectorWidget(true))
 {
     setWindowTitle(tr("Import an existing project"));
+    setMinimumSize(600, 400);
+    
+    
+    
     
     QDialogButtonBox* buttons(new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel));
     

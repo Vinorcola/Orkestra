@@ -21,6 +21,7 @@ class MainController :public QStateMachine
         ProjectManager* m_projectManager;
         QAction* m_quit;
         QAction* m_importProject;
+        QAction* m_phpConfig;
         QAction* m_composerConfig;
         EditorWidget* m_editorWidget;
         ProjectFileDock* m_projectFileDock;
@@ -44,6 +45,10 @@ class MainController :public QStateMachine
         
         
         void displayProjectImportator();
+        
+        
+        
+        void configurePHP();
         
         
         

@@ -8,6 +8,7 @@
 
 
 CommandLineLauncherDialog::CommandLineLauncherDialog(QWidget* parent,
+                                                     const QString& workingDirectory,
                                                      const QString& command,
                                                      const QStringList& arguments) :
     QDialog(parent),
@@ -16,6 +17,7 @@ CommandLineLauncherDialog::CommandLineLauncherDialog(QWidget* parent,
     m_buttons(new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)),
     m_processError(false)
 {
+    setWindowTitle(tr("Command line operation"));
     setMinimumSize(600, 400);
     
     
@@ -46,6 +48,10 @@ CommandLineLauncherDialog::CommandLineLauncherDialog(QWidget* parent,
     {
         m_process.setArguments(arguments);
     }
+    if (!workingDirectory.isEmpty())
+    {
+        m_process.setWorkingDirectory(workingDirectory);
+    }
     
     connect(&m_process, &QProcess::readyReadStandardOutput, this, &CommandLineLauncherDialog::updateOutput);
     connect(&m_process, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), this, &CommandLineLauncherDialog::processFinish);
@@ -54,6 +60,18 @@ CommandLineLauncherDialog::CommandLineLauncherDialog(QWidget* parent,
         m_processError = true;
     });
     connect(&m_process, static_cast<void (QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &CommandLineLauncherDialog::processFinish);
+}
+
+
+
+
+
+CommandLineLauncherDialog::CommandLineLauncherDialog(QWidget* parent,
+                                                     const QString& command,
+                                                     const QStringList& arguments) :
+    CommandLineLauncherDialog(parent, QString(), command, arguments)
+{
+    
 }
 
 
