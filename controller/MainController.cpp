@@ -93,7 +93,7 @@ MainController::~MainController()
 void MainController::init()
 {
     m_config->load(m_projectManager);
-    m_window->show();
+    m_window->showMaximized();
 }
 
 
