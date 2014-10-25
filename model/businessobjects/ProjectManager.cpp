@@ -103,9 +103,18 @@ bool ProjectManager::load(QXmlStreamReader& inputStream,
         /* We delete the last project that was not configured.
          */
         delete project;
+        
+        // We go to the end of the projects tag.
+        inputStream.readNextStartElement();
+        while (!inputStream.atEnd() && inputStream.name() != "projects")
+        {
+            inputStream.readNextStartElement();
+        }
+        
+        return true;
     }
     
-    return true;
+    return false;
 }
 
 

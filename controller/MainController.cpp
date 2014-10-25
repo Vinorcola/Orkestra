@@ -7,19 +7,20 @@
 #include <QMenuBar>
 
 #include "controller/ProjectLoadedState.hpp"
+#include "view/widgets/ComposerConfigDialog.hpp"
 #include "view/widgets/ProjectImportator.hpp"
 
 
 
 
 
-#include <QDebug>
 MainController::MainController() :
     QStateMachine(),
     m_config(new Config(this)),
     m_projectManager(new ProjectManager(*m_config, this)),
     m_quit(new QAction(tr("Quit"), this)),
     m_importProject(new QAction(tr("Import a project"), this)),
+    m_composerConfig(new QAction(tr("Composer"), this)),
     m_editorWidget(new EditorWidget),
     m_projectFileDock(new ProjectFileDock(m_projectManager)),
     m_openedFileDock(new OpenedFileDock),
@@ -68,6 +69,9 @@ MainController::MainController() :
     menuApplication->addSeparator();
     menuApplication->addAction(m_quit);
     
+    QMenu* menuConfiguration(m_window->menuBar()->addMenu(tr("Configuration")));
+    menuConfiguration->addAction(m_composerConfig);
+    
     
     
     // Setup actions.
@@ -75,6 +79,7 @@ MainController::MainController() :
     m_importProject->setShortcut(Qt::CTRL + Qt::Key_I);
     
     connect(m_importProject, &QAction::triggered, this, &MainController::displayProjectImportator);
+    connect(m_composerConfig, &QAction::triggered, this, &MainController::configureComposer);
 }
 
 
@@ -93,7 +98,7 @@ MainController::~MainController()
 void MainController::init()
 {
     m_config->load(m_projectManager);
-    m_window->showMaximized();
+    m_window->show();
 }
 
 
@@ -111,6 +116,19 @@ void MainController::displayProjectImportator()
          * signal will push the controller in the projectLoaded state. All the work will be done on project loaded state
          * entry.
          */
+    }
+}
+
+
+
+
+
+void MainController::configureComposer()
+{
+    ComposerConfigDialog dialog(m_config->getComposerConfig().getCommand(), m_window);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_config->getComposerConfig().setCommand(dialog.getCommand());
     }
 }
 

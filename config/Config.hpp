@@ -7,6 +7,7 @@
 
 #include "config/ConfigurableInterface.hpp"
 #include "config/global.hpp"
+#include "model/config/ComposerConfig.hpp"
 
 class ProjectManager;
 
@@ -24,6 +25,7 @@ class Config : public QObject
         QString m_directory;
         QFile m_file;
         QHash<FileFormat::Enum, QsciLexer*> m_lexerList;
+        ComposerConfig m_composerConfig;
         
         
         
@@ -36,11 +38,15 @@ class Config : public QObject
         
         
         
-        void save(const ConfigurableInterface* configurable);
+        ComposerConfig& getComposerConfig();
         
         
         
-        void load(ConfigurableInterface* configurable);
+        void save(const ProjectManager* projectManager);
+        
+        
+        
+        void load(ProjectManager* projectManager);
 };
 
 #endif // CONFIG_HPP

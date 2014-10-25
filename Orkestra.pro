@@ -19,31 +19,37 @@ CONFIG += c++11 qscintilla2
 SOURCES += main.cpp\
     config/Config.cpp \
     controller/MainController.cpp \
+    controller/ProjectLoadedState.cpp \
     model/businessobjects/File.cpp \
     model/businessobjects/Project.cpp \
     model/businessobjects/ProjectManager.cpp \
+    model/config/ComposerConfig.cpp \
     view/docks/OpenedFileDock.cpp \
     view/docks/ProjectFileDock.cpp \
+    view/widgets/CommandLineLauncherDialog.cpp \
+    view/widgets/ComposerConfigDialog.cpp \
     view/widgets/EditorWidget.cpp \
     view/widgets/FileSelectorWidget.cpp \
     view/widgets/FileWidget.cpp \
     view/widgets/MainWindow.cpp \
-    view/widgets/ProjectImportator.cpp \
-    controller/ProjectLoadedState.cpp
+    view/widgets/ProjectImportator.cpp
 
 
 HEADERS += config/global.hpp \
     config/Config.hpp \
     config/ConfigurableInterface.hpp \
     controller/MainController.hpp \
+    controller/ProjectLoadedState.hpp \
     model/businessobjects/File.hpp \
     model/businessobjects/Project.hpp \
     model/businessobjects/ProjectManager.hpp \
+    model/config/ComposerConfig.hpp \
     view/docks/OpenedFileDock.hpp \
     view/docks/ProjectFileDock.hpp \
+    view/widgets/CommandLineLauncherDialog.hpp \
+    view/widgets/ComposerConfigDialog.hpp \
     view/widgets/EditorWidget.hpp \
     view/widgets/FileSelectorWidget.hpp \
     view/widgets/FileWidget.hpp \
     view/widgets/MainWindow.hpp \
-    view/widgets/ProjectImportator.hpp \
-    controller/ProjectLoadedState.hpp
+    view/widgets/ProjectImportator.hpp

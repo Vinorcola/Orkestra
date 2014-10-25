@@ -21,7 +21,8 @@ Config::Config(QObject* parent) :
     QObject(parent),
     m_directory(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first() + "/orkestra"),
     m_file(m_directory + "/config.xml"),
-    m_lexerList()
+    m_lexerList(),
+    m_composerConfig()
 {
     if (!QFileInfo::exists(m_directory))
     {
@@ -71,7 +72,16 @@ QsciLexer* Config::getLexer(const FileFormat::Enum format) const
 
 
 
-void Config::save(const ConfigurableInterface* configurable)
+ComposerConfig& Config::getComposerConfig()
+{
+    return m_composerConfig;
+}
+
+
+
+
+
+void Config::save(const ProjectManager* projectManager)
 {
     if (m_file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
     {
@@ -86,7 +96,8 @@ void Config::save(const ConfigurableInterface* configurable)
         
         outputStream.writeStartElement(QStringLiteral("config"));
         
-        configurable->save(outputStream);
+        m_composerConfig.save(outputStream);
+        projectManager->save(outputStream);
         
         outputStream.writeEndElement();// config
         
@@ -106,7 +117,7 @@ void Config::save(const ConfigurableInterface* configurable)
 
 
 
-void Config::load(ConfigurableInterface* configurable)
+void Config::load(ProjectManager* projectManager)
 {
     if (QFileInfo::exists(m_file.fileName()))
     {
@@ -122,7 +133,8 @@ void Config::load(ConfigurableInterface* configurable)
             while (!inputStream.atEnd() && inputStream.readNextStartElement() && inputStream.name() != "orkestra") {}
             while (!inputStream.atEnd() && inputStream.readNextStartElement() && inputStream.name() != "config") {}
             
-            configurable->load(inputStream, *this);
+            m_composerConfig.load(inputStream, *this);
+            projectManager->load(inputStream, *this);
             
             m_file.close();
         }
